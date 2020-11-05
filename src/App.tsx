@@ -170,6 +170,20 @@ const IntroIcon : React.FC<IntroIconProps> = (props) =>{
   return (icon)
 }
 
+interface CardLayoutProps {
+    background: HTMLElement
+    foreground: HTMLElement
+}
+
+
+const CardLayout: React.FC<CardLayoutProps> = (props) => {
+  return (
+  <div>
+
+  </div>
+  )
+}
+
 function App() {
 
 
@@ -326,13 +340,13 @@ function App() {
         <div className='vertical-space-2'></div>
         <div className='project-item'>
           <img alt='photomonatage' className='project-bg' style={{bottom: -45}} src="static/img/photomontage.png" />
-          <div className='project-content'>
+          <div className='project-content project-cover-dark-gradient-tl'>
             <div className='project-subtitle'>ZJU | Computational Photography | C++ | OpenCV</div>
             <h3 style={{color:'white'}}>Interactive Digital Photomontage</h3>
             <div className="vertical-space-1"></div>
-            <p className="project-text project-lefttext">User can paint on images to indicate best part of each image. The algorithm first uses graphcut to extend user's brushes into regions. Then it use Gradient Domain Fushion to make it seamless</p>
+            <p className="project-text project-lefttext">Users can paint on images to indicate the best part of each image. The algorithm first uses graph-cut to extend user's brushes into regions. Then it uses Gradient Domain Fusion to make it seamless.</p>
             <div className="vertical-space-1"></div>
-            <p className="project-subtext project-lefttext">The background image demonstrates how gradient domain fushion gradually recover image from all 0s.</p>
+            <p className="project-subtext project-lefttext">The background image demonstrates how gradient-domain fusion gradually recover the image from all 0s.</p>
             <a className='project-links' href="https://grail.cs.washington.edu/projects/photomontage/photomontage.pdf"> Paper <br/></a>
             <a className='project-links' href="https://github.com/linwe2012/CourseComputationalPhotography">Github <br/></a>
             <a className='project-links' href="https://github.com/linwe2012/CourseComputationalPhotography">Demo Video <br/></a>
@@ -341,15 +355,17 @@ function App() {
 
         <div className='project-item'>
           
-          <img alt='photomonatage' className='project-bg' style={{bottom: -45}} src="static/img/photomontage.png" />
+          <img alt='schroedinger smoke' className='project-bg' style={{bottom: -45}} src="static/img/schroedinger_smoke.png" />
           <div className='project-content'>
             <div className='project-subtitle'>ZJU | Advances in Computer Graphics | C# | Compute Shader</div>
             <h3 style={{color:'white'}}>Schrödinger's Smoke <span className="project-tagtext">Siggraph 16</span></h3>
 
             <div className="vertical-space-1"></div>
-            <p className="project-text project-lefttext">User can paint on images to indicate best part of each image. The algorithm first uses graphcut to extend user's brushes into regions. Then it use Gradient Domain Fushion to make it seamless</p>
+            <p className="project-text project-lefttext">
+            Schrödinger's Equation in Quantum Mechanics can be used to describe superfluids, whose dynamics is similar to that of smoke. The paper leverages Schrödinger's Equation to calculate vortex and generates the velocity field from the wave function.
+            </p>
             <div className="vertical-space-1"></div>
-            <p className="project-subtext project-lefttext">The background image demonstrates how gradient domain fushion gradually recover image from all 0s.</p>
+            <p className="project-subtext project-lefttext">The background image demonstrates simulating results with over 100,000,000 particles.</p>
             <a className='project-links' href="https://grail.cs.washington.edu/projects/photomontage/photomontage.pdf"> Paper <br/></a>
             <a className='project-links' href="https://github.com/linwe2012/CourseComputationalPhotography">Github <br/></a>
             <a className='project-links' href="https://github.com/linwe2012/CourseComputationalPhotography">Demo Video <br/></a>

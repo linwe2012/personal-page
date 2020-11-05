@@ -118,13 +118,15 @@ p{
   position: relative;
 }
 
+.project-cover-dark-gradient-tl {
+  background: linear-gradient(135deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.6031390134529149) 25%, rgba(0,212,255,0) 100%);
+}
 .project-content {
   position: absolute;
   padding: 20px;
   width: calc(100% - 40px);
   min-height: 100%;
   top: 0px;
-  background: linear-gradient(135deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.6031390134529149) 25%, rgba(0,212,255,0) 100%);
   font-size: 160%;
   display: border-box;
 }
@@ -142,6 +144,10 @@ p{
   font-size: 60%;
 }
 @media (max-width: 700px) {
+  .project-item {
+    top: 0px;
+    margin-bottom: 0px;
+  }
   .project-bg {
     width: 100%;
     position: absolute;
@@ -153,14 +159,6 @@ p{
   }
 }
 
-@media (max-width: 767px) {
-  .project-subtitle {
-    font-size: 50%;
-  }
-  .project-content {
-    font-size: 100%;
-  }
-}
 
 .project-margins {
   margin-left: 10px;
@@ -198,18 +196,19 @@ p{
 }
 
 .project-tagtext {
-  font-size: 50%;
+  font-size: 40%;
   color: #ffffffa0;
   border: 1px solid #ffffffa0;
   border-radius:5px; 
 
   padding: 2px 5px 2px 5px;
   position: relative;
-  top: -3px;
+  top: -6px;
+  font-weight: 400;
   
 }
 
-@media (max-width: 767px) {
+@media (max-width: 975px) {
   .project-links, .project-text {
     font-size: 80%;
   }
@@ -219,5 +218,12 @@ p{
 
   .project-lefttext {
     max-width: 80%;
+  }
+
+  .project-subtitle {
+    font-size: 50%;
+  }
+  .project-content {
+    font-size: 100%;
   }
 }
