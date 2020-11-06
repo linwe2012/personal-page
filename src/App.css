@@ -101,6 +101,16 @@ p{
   height: 30px;
 }
 
+.vertical-space-5 {
+  width: 100%;
+  height: 50px;
+}
+
+.vertical-space-7 {
+  width: 100%;
+  height: 70px;
+}
+
 .gmail-text {
   margin: 10px;
   color: #00000060;
@@ -115,18 +125,19 @@ p{
 
 .project-bg {
   width: 100%;
-  position: relative;
+  position: absolute;
+  bottom: 0px;
 }
 
 .project-cover-dark-gradient-tl {
-  background: linear-gradient(135deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.6031390134529149) 25%, rgba(0,212,255,0) 100%);
+  background: linear-gradient(135deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.6031390134529149) 25%, rgba(1, 45, 54, 0) 100%);
 }
 .project-content {
   position: absolute;
   padding: 20px;
   width: calc(100% - 40px);
-  min-height: 100%;
-  top: 0px;
+  /* min-height: 100%; */
+  top: 0;
   font-size: 160%;
   display: border-box;
 }
@@ -143,21 +154,9 @@ p{
   color: #ffffff90;
   font-size: 60%;
 }
-@media (max-width: 700px) {
-  .project-item {
-    top: 0px;
-    margin-bottom: 0px;
-  }
-  .project-bg {
-    width: 100%;
-    position: absolute;
-    bottom: 0!important;
-  }
 
-  .project-content {
-    position: relative;
-  }
-}
+
+
 
 
 .project-margins {
@@ -208,7 +207,38 @@ p{
   
 }
 
-@media (max-width: 975px) {
+@media (max-width: 900px) {
+  .project-item {
+    top: 0px;
+    margin-bottom: 0px;
+  }
+  .project-bg {
+    width: 100%;
+    position: absolute;
+    bottom: 0!important;
+  }
+
+  .project-content {
+    position: relative;
+  }
+}
+/*
+@media (max-width: 1100px) {
+  .project-item {
+    top: 0px;
+    margin-bottom: 0px;
+  }
+  .project-bg {
+    width: 100%;
+    position: absolute;
+  }
+
+  .project-content {
+    position: relative;
+  }
+}*/
+
+@media (max-width: 900px) {
   .project-links, .project-text {
     font-size: 80%;
   }

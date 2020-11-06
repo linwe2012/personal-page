@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 //import logo from './logo.svg';
 import './App.css';
 //import Avatar from '@material-ui/core/Avatar';
@@ -169,24 +169,111 @@ const IntroIcon : React.FC<IntroIconProps> = (props) =>{
   }
   return (icon)
 }
-
+/*
 interface CardLayoutProps {
-    background: HTMLElement
-    foreground: HTMLElement
+    background: JSX.Element
+    foreground: JSX.Element
+
+    windowWidth: number
+    windowHeight: number
 }
 
 
 const CardLayout: React.FC<CardLayoutProps> = (props) => {
-  return (
-  <div>
+  const outerDiv = useRef<HTMLDivElement|null>(null)
+  
+  props.background.setAttribute('width', props.windowWidth.toString())
+  props.foreground.setAttribute('width', props.windowWidth.toString())
 
+  const maxHeight = Math.max(props.background.clientHeight, props.foreground.clientHeight)
+
+  return (
+  <div ref={outerDiv} style={{height: maxHeight}}>
+    {props.background}
+    {props.foreground}
   </div>
   )
 }
+*/
+
+
 
 function App() {
 
+  // const [size, setSize] = useState([0, 0]);
+  //const [projectImageRefs, setProjectImageRefs]  =  useState(new Array<HTMLElement>()) 
+  //const [projectContentRefs, setProjectContentRefs] = useState(new Array<HTMLElement>())
+  //const [projectItemRefs, setProjectItemRefs] = useState(new Array<HTMLElement>())
+  const projectImageRefs = new Array<HTMLElement>()
+  const projectContentRefs = new Array<HTMLElement>()
+  const projectItemRefs = new Array<HTMLElement>()
+  const projectContentInner = new Array<HTMLElement>()
 
+  const refProjContentInner = (i: number) => {
+    return (instance: HTMLElement | null) =>{
+      if (!instance ) return;
+      //const r = [...projectImageRefs]
+      projectContentInner[i] = instance
+      //setProjectImageRefs(r)
+    }
+  }
+
+  const refProjIm = (i: number)=>{
+    return (instance: HTMLElement | null) =>{
+      if (!instance ) return;
+      //const r = [...projectImageRefs]
+      projectImageRefs[i] = instance
+      //setProjectImageRefs(r)
+    }
+  }
+
+  const refProjContent = (i: number)=>{
+    return (instance: HTMLElement | null) =>{
+      if (!instance ) return;
+      // const r = [...projectContentRefs]
+      projectContentRefs[i] = instance
+      // setProjectContentRefs(r)
+    }
+  }
+
+  const refProjItem = (i: number)=>{
+    return (instance: HTMLElement | null) =>{
+      if (!instance ) return;
+      // const r = [...projectItemRefs]
+      projectItemRefs[i] = instance
+      // setProjectItemRefs(r)
+    }
+  }
+
+  function updateSize() {
+    //setSize([window.innerWidth, window.innerHeight]);
+    for(let projKey in projectImageRefs) {
+      const im = projectImageRefs[projKey]
+      //const content = projectContentRefs[projKey]
+      const innerContent = projectContentInner[projKey]
+      const hIm = im.clientHeight
+      const hContent = innerContent.clientHeight;
+      const h = Math.max(hIm, hContent)
+      const hItem = Math.max(hIm, hContent + 40)
+      projectItemRefs[projKey].style.height = hItem.toString() + 'px' //.setAttribute('height', h.toString() + 'px')
+      projectContentRefs[projKey].style.height = h.toString() + 'px'
+    }
+  }
+  
+  useEffect(() => {
+    updateSize();
+    window.onload = updateSize;
+    //updateSize();
+    // eslint-disable-next-line
+  }, [])
+  useLayoutEffect(() => {
+    
+    window.addEventListener('resize', updateSize);
+    updateSize();
+    return () => window.removeEventListener('resize', updateSize);
+    // eslint-disable-next-line
+  }, []);
+  
   const introIconStyle : SimpleIconProps = {
     size: 24,
     style: {
@@ -338,9 +425,10 @@ function App() {
       <div>
         <h2 className='project-start-title'>Projects</h2>
         <div className='vertical-space-2'></div>
-        <div className='project-item'>
-          <img alt='photomonatage' className='project-bg' style={{bottom: -45}} src="static/img/photomontage.png" />
-          <div className='project-content project-cover-dark-gradient-tl'>
+        <div className='project-item' ref={refProjItem(0)}>
+          <img alt='photomonatage' className='project-bg' style={{bottom: -45}} src="static/img/photomontage.png" ref={refProjIm(0)}/>
+          <div className='project-content project-cover-dark-gradient-tl' ref={refProjContent(0)}>
+          <div ref={refProjContentInner(0)}>
             <div className='project-subtitle'>ZJU | Computational Photography | C++ | OpenCV</div>
             <h3 style={{color:'white'}}>Interactive Digital Photomontage</h3>
             <div className="vertical-space-1"></div>
@@ -350,28 +438,61 @@ function App() {
             <a className='project-links' href="https://grail.cs.washington.edu/projects/photomontage/photomontage.pdf"> Paper <br/></a>
             <a className='project-links' href="https://github.com/linwe2012/CourseComputationalPhotography">Github <br/></a>
             <a className='project-links' href="https://github.com/linwe2012/CourseComputationalPhotography">Demo Video <br/></a>
+            <div className="vertical-space-7"></div>
+          </div>
           </div>
         </div>
 
-        <div className='project-item'>
-          
-          <img alt='schroedinger smoke' className='project-bg' style={{bottom: -45}} src="static/img/schroedinger_smoke.png" />
-          <div className='project-content'>
+        
+        <div className='project-item' style={{backgroundColor: '#222020'}} ref={refProjItem(1)}>
+          <img alt='schroedinger smoke' className='project-bg' style={{bottom: -45}} src="static/img/schroedinger_smoke.png" ref={refProjIm(1)}/>
+          <div className='project-content' ref={refProjContent(1)}>
+          <div ref={refProjContentInner(1)}>
             <div className='project-subtitle'>ZJU | Advances in Computer Graphics | C# | Compute Shader</div>
             <h3 style={{color:'white'}}>Schrödinger's Smoke <span className="project-tagtext">Siggraph 16</span></h3>
 
             <div className="vertical-space-1"></div>
             <p className="project-text project-lefttext">
-            Schrödinger's Equation in Quantum Mechanics can be used to describe superfluids, whose dynamics is similar to that of smoke. The paper leverages Schrödinger's Equation to calculate vortex and generates the velocity field from the wave function.
+            I implements the paper in Unity and accelerate it with Computer Shader, which runs faster than original paper. </p>
+            <p className="project-text project-lefttext">Schrödinger's Equation in Quantum Mechanics can be used to describe superfluids, whose dynamics is similar to that of smoke. The paper leverages Schrödinger's Equation to calculate vortex and generates the velocity field from the wave function.
             </p>
             <div className="vertical-space-1"></div>
             <p className="project-subtext project-lefttext">The background image demonstrates simulating results with over 100,000,000 particles.</p>
-            <a className='project-links' href="https://grail.cs.washington.edu/projects/photomontage/photomontage.pdf"> Paper <br/></a>
-            <a className='project-links' href="https://github.com/linwe2012/CourseComputationalPhotography">Github <br/></a>
-            <a className='project-links' href="https://github.com/linwe2012/CourseComputationalPhotography">Demo Video <br/></a>
+            <a className='project-links' href="http://page.math.tu-berlin.de/~chern/projects/SchrodingersSmoke/"> Paper <br/></a>
+            <a className='project-links' href="https://github.com/linwe2012/ShroedingerSmoke">Github <br/></a>
+            <div className="vertical-space-7"></div>
+          </div>
           </div>
         </div>
         
+        <div className='project-item' style={{backgroundColor: '#88b8ca' }} ref={refProjItem(2)}>
+          <img alt='schroedinger smoke' className='project-bg' style={{bottom: -45}} src="static/img/animal_party.png" ref={refProjIm(2)}/>
+          <div className='project-content' ref={refProjContent(2)}>
+          <div ref={refProjContentInner(2)}>
+            <div className='project-subtitle'>ZJU | Game Design | C# | Joycon</div>
+            <h3 style={{color:'white'}}>Animal Party</h3>
+
+            <div className="vertical-space-1"></div>
+            <div className='project-lefttext' style={{backgroundColor: '#00000055', marginLeft: -40, paddingLeft: 40, paddingTop: 20, paddingRight: 20, paddingBottom: 20}}>
+              <p className="project-text  project-text-white">
+              I led my team made this game where Joycon &and; body movements are used to play. The game is about taking care of animals. You can feed and pet animals in the game.  
+
+              </p>
+              <p className="project-text  project-text-white">
+                There are five missions and a tutorial in the game.
+              </p>
+
+              <div className="vertical-space-1"></div>
+              <p className="project-subtext">The background image is the intro scene.</p>
+              
+              <a className='project-links' href="https://github.com/linwe2012/AnimalParty">Github <br/></a>
+              <a className='project-links' href="https://youtu.be/5kacuvv1os8"> Demo Video <br/></a>
+            </div>
+            <div className="vertical-space-5"></div>
+          </div>
+          </div>
+        </div>
+
       </div>
     </div>
   );
