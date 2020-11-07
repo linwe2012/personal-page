@@ -9,7 +9,7 @@ import { Cplusplus, Javascript, Python, Props as SimpleIconProps, Mathworks, Ico
 import Link from '@material-ui/core/Link';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-
+import SplineView from './splineView'
 
 interface IntroEntryProps {
   title: string
@@ -111,7 +111,7 @@ const createConcanicalPolygonPath = (n : number, size : number, radius : number,
   const cut = radius / Math.tan(halfAngle);
   const len = 2 * r * Math.cos(halfAngle)
   const cut_percentage = cut / len;
-  console.log(`cut: ${cut_percentage*100}%`)
+  //console.log(`cut: ${cut_percentage*100}%`)
   
 
   const vertices = new Array<Vector2>()
@@ -309,29 +309,6 @@ function App() {
   return (
     <div className="App">
       <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,700" rel="stylesheet"></link>
-      {/*<svg viewBox='0 0 120 100' width="200" height="200">
-        <defs>
-          <pattern id="img1" patternUnits="userSpaceOnUse" width="100" height="100">
-          <image href='static/img/me.jpg' x="-10" y="0" width="200" height="200"/>
-          </pattern>
-        </defs>
-        <path d='M38,2 
-                L82,2 
-                A12,12 0 0,1 94,10 
-                L112,44 
-                A12,12 0 0,1 112,56
-                L94,90       
-                A12,12 0 0,1 82,98
-                L38,98
-                A12,12 0 0,1 26,90
-                L8,56
-                A12,12 0 0,1 8,44
-                L26,10
-                A12,12 0 0,1 38,2' fill="url(#img1)"/>
-  </svg>*/}
-
-      
-
       <Grid container style={selfIntroStyle} alignItems='flex-start'>
         <div className="vertical-space-2"></div>
         <Grid item xs={12} md={4}>
@@ -401,7 +378,7 @@ function App() {
           </Grid>
         </Grid>
       
-      <Grid item xs={12} md={8} justify="center" alignItems="center" >
+      <Grid item xs={12} md={8}>
         <div className="vertical-space-2"></div>
         <h1 style = {{margin: 0}}>Zhaowei Lin</h1>
         <h3 style = {{ marginBottom: 10 }}>Student, Programmer in Hangzhou</h3>
@@ -426,7 +403,7 @@ function App() {
         <h2 className='project-start-title'>Projects</h2>
         <div className='vertical-space-2'></div>
         <div className='project-item' ref={refProjItem(0)}>
-          <img alt='photomonatage' className='project-bg' style={{bottom: -45}} src="static/img/photomontage.png" ref={refProjIm(0)}/>
+          <img alt='photomonatage' className='project-bg' style={{bottom: 0}} src="static/img/photomontage.png" ref={refProjIm(0)}/>
           <div className='project-content project-cover-dark-gradient-tl' ref={refProjContent(0)}>
           <div ref={refProjContentInner(0)}>
             <div className='project-subtitle'>ZJU | Computational Photography | C++ | OpenCV</div>
@@ -445,7 +422,7 @@ function App() {
 
         
         <div className='project-item' style={{backgroundColor: '#222020'}} ref={refProjItem(1)}>
-          <img alt='schroedinger smoke' className='project-bg' style={{bottom: -45}} src="static/img/schroedinger_smoke.png" ref={refProjIm(1)}/>
+          <img alt='schroedinger smoke' className='project-bg' style={{bottom: 0}} src="static/img/schroedinger_smoke.png" ref={refProjIm(1)}/>
           <div className='project-content' ref={refProjContent(1)}>
           <div ref={refProjContentInner(1)}>
             <div className='project-subtitle'>ZJU | Advances in Computer Graphics | C# | Compute Shader</div>
@@ -464,6 +441,35 @@ function App() {
           </div>
           </div>
         </div>
+
+        <div className='project-item gradient-spline'>
+          <div className='project-content' style={{position: 'relative'}}>
+            <div className='project-subtitle'>ZJU | Computer Animations | Typescript | WebGL</div>
+            <h3 style={{color:'white'}}>Splines, FFD, FuzzyWarp</h3>
+            <p className="project-text">
+              All three projects are written in typescript and you can play with it online.
+            </p>
+            <p>
+              <span className="project-text project-text-white"> Spline: </span>
+              <a className='project-links' href="https://github.com/linwe2012/Spline">Github</a> <span>  </span>
+              <a className='project-links' href="https://linwe2012.github.io/Spline/"> Demo </a>
+            </p>
+            <p>
+              <span className="project-text project-text-white"> Free Form Deformation: </span>
+              <a className='project-links' href="https://github.com/linwe2012/FreeFormDeformation">Github</a> <span>  </span>
+              <a className='project-links' href="https://linwe2012.github.io/FreeFormDeformation/"> Demo </a>
+            </p>
+            <p>
+              <span className="project-text project-text-white"> Fuzzy Warp: </span>
+              <a className='project-links' href="https://github.com/linwe2012/FuzzyWarp">Github</a> <span>  </span>
+              <a className='project-links' href="https://linwe2012.github.io/FuzzyWarp/"> Demo </a>
+            </p>
+            <div className="vertical-space-1"></div>
+            <SplineView></SplineView>
+          </div>
+          
+        
+        </div>
         
         <div className='project-item' style={{backgroundColor: '#88b8ca' }} ref={refProjItem(2)}>
           <img alt='schroedinger smoke' className='project-bg' style={{bottom: -45}} src="static/img/animal_party.png" ref={refProjIm(2)}/>
@@ -475,7 +481,7 @@ function App() {
             <div className="vertical-space-1"></div>
             <div className='project-lefttext' style={{backgroundColor: '#00000055', marginLeft: -40, paddingLeft: 40, paddingTop: 20, paddingRight: 20, paddingBottom: 20}}>
               <p className="project-text  project-text-white">
-              I led my team made this game where Joycon &and; body movements are used to play. The game is about taking care of animals. You can feed and pet animals in the game.  
+              I led my team made this game where Joycon &amp; body movements are used to play. The game is about taking care of animals. You can feed and pet animals in the game.  
 
               </p>
               <p className="project-text  project-text-white">

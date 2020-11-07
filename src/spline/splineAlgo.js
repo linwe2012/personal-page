@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 
 import { MapColorToDiscrete, BeginingPrime, Integration, ComputeTransformMatrix } from './utils'
-import { ImageManger } from './imageman'
+//import { ImageManger } from './imageman'
 
 
 
@@ -13,6 +13,41 @@ export const Samplers = {
     'ease out sine': (v)=> Math.sin(v * Math.PI / 2),
     'ease in out sine': (v)=> (Math.sin((v-0.5)*Math.PI) + 1)/2
 }
+
+// const lineVertexShaderSrc = `
+// attribute vec3 center; varying vec3 vCenter; void main() { vCenter = center; gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 ); }
+// `
+
+// const lineFragmentShaderSrc = `
+// varying vec3 vCenter; uniform float lineWidth; 
+//   float edgeFactorTri() { 
+//   vec3 d = fwidth( vCenter.xyz ); 
+//   vec3 a3 = smoothstep( vec3( 0.0 ), d * lineWidth, vCenter.xyz ); 
+//   return min( min( a3.x, a3.y ), a3.z ); } 
+// void main() {
+//   float factor = edgeFactorTri();
+//   if ( factor > 0.8 ) discard; // <===============
+//   gl_FragColor.rgb = mix( vec3(
+//   1.0 ), vec3( 0.2 ), factor); 
+//   gl_FragColor.a = 1.0;
+// }
+// `
+// let lineVertexShader = null;
+// let lineFragmentShader = null;
+
+// const glShader = (gl, type, shaderSource) => {
+//     const shader = gl.createShader(type);
+//     gl.shaderSource(shader, shaderSource);
+//     gl.compileShader(shader);
+//     return shader
+// }
+
+
+export const InitContext = (gl)=>{
+//     lineVertexShader = glShader(gl, gl.VERTEX_SHADER, lineVertexShaderSrc)
+//     lineFragmentShader = glShader(gl, gl.FRAGMENT_SHADER, lineFragmentShaderSrc)
+}
+
 
 export class SplineLine {
     need_update = false
@@ -26,6 +61,15 @@ export class SplineLine {
     newCurveTau = 0.5
     param = []
     splineMatrial = new THREE.LineBasicMaterial( { color: 0xcccccc, linewidth: 2.2 } );
+    //splineMatrial = new THREE.ShaderMaterial({
+    //    uniforms: {
+    //        lineWidth: {
+    //          value: 3
+    //        }
+    //    },
+    //    vertexShader: lineVertexShaderSrc,
+    //    fragmentShader: lineVertexShaderSrc,
+    //})
     scene = null
     param_cache = []
     param_is_displaying = false
@@ -46,7 +90,7 @@ export class SplineLine {
     clone() {
         let last_spline = this.spline
         let c = new SplineLine(this.scene, this.themeColor)
-        let splineMat = new THREE.LineBasicMaterial( { color: last_spline.material.color.clone(), linewidth: 2.7 } );
+        let splineMat = new THREE.LineBasicMaterial( { color: last_spline.material.color.clone(), linewidth: 1.2 } );
         let splineGeo = new THREE.Geometry();
         splineGeo.vertices = last_spline.geometry.vertices.map(v => v.clone())
         c.spline = new THREE.Line(splineGeo, splineMat)
@@ -71,6 +115,7 @@ export class SplineLine {
         
         let theme = this.themeColor[MapColorToDiscrete(this.curveTau)]
         if(this.timeGoes >= this.animateTime) {
+            
             this.spline.geometry.vertices = this.newCurve
             this.newCurve = null
             this.spline.material.color.set(theme)
@@ -372,6 +417,9 @@ export class SplineGroup {
     show_param = false
     param_sampler_fn = Samplers.linear
     param_sampler_name = 'linear'
+    listener = null
+    is_handling_drag = false
+    is_bifrost_animating = false
 
     constructor(scene, canvas, camera, planeMesh, themeColor) {
         this.scene = scene
@@ -379,7 +427,7 @@ export class SplineGroup {
         this.camera = camera
         this.planeMesh = planeMesh
         this.themeColor = themeColor
-        this.geometry.addAttribute( 'position', new THREE.BufferAttribute( this.positions, 3 ) );
+        this.geometry.setAttribute( 'position', new THREE.BufferAttribute( this.positions, 3 ) );
         this.line = new THREE.Line( this.geometry,  this.material );
         this.splines.push(new SplineLine(scene, themeColor))
 
@@ -391,6 +439,12 @@ export class SplineGroup {
         canvas.onclick = (e)=>{this.HandleClick(e)}
     }
     
+    _NotifyListener(msg) {
+        if(this.listener) {
+            this.listener(msg)
+        }
+    }
+
     MouseHoverOrDrag(event) {
         this.canvas.setPickPosition(event)
         let pickPosition = this.canvas.pickPosition
@@ -414,7 +468,11 @@ export class SplineGroup {
         
     }
 
+    
+
     HandleDrag() {
+        if (this.is_bifrost_animating) return;
+
         let dotOnPlane = this.GetMouseOnPlane()
         this.dot_hovered.position.set(dotOnPlane.x, dotOnPlane.y, dotOnPlane.z)
         let id = this.dot_hovered.userData.id * 3
@@ -425,6 +483,7 @@ export class SplineGroup {
         arr[id+2]= dotOnPlane.z
         this.line.geometry.attributes.position.needsUpdate = true
         this.spline_ctrl_needs_update = true
+        
     }
 
     GetMouseOnPlane() {
@@ -440,9 +499,24 @@ export class SplineGroup {
         if(!this.spline_ctrl_needs_update) {
             return
         }
+
+        this.bifrost = false;
+        this.is_handling_drag = true
+
+        let firstSpline = true
+        
         for(let spline of this.splines) {
+            if(firstSpline) {
+                firstSpline = false
+                spline.curveUpdateDone = () => {
+                    spline.curveUpdateDone = null
+                    this.is_handling_drag = false;
+                }
+            }
             spline.Sample(this.dotsGroup.children, this.global_tau, this.global_gran).KickUpdateCurve()
+            
         }
+
         this.spline_ctrl_needs_update = false
     }
 
@@ -465,6 +539,11 @@ export class SplineGroup {
         for(let s of this.splines) {
             s.Append(this.dotsGroup.children, this.global_gran, pointOnPlane)
         }
+        if (this.bifrost_save.splines) {
+            for(let s of this.bifrost_save.splines) {
+                s.Append(this.dotsGroup.children, this.global_gran, pointOnPlane)
+            }
+        }
 
         let positions = this.line.geometry.attributes.position.array;
         positions[3 * this.drawCount] = pointOnPlane.x
@@ -473,6 +552,7 @@ export class SplineGroup {
         ++this.drawCount;
         this.line.geometry.setDrawRange(0, this.drawCount)
         this.line.geometry.attributes.position.needsUpdate = true
+        this._NotifyListener('addDot')
         this.MouseHoverOrDrag(event)
     }
 
@@ -483,6 +563,7 @@ export class SplineGroup {
     
         this.global_gran = newGran
         for(let s of this.splines) {
+            
             s.Sample(this.dotsGroup.children, this.global_tau, this.global_gran).DisplayNewCurve()
         }
     }
@@ -513,9 +594,10 @@ export class SplineGroup {
     }
 
     set bifrost(bool) {
-        let bifrost = this.bifrost_save.splines
+        let bifrost_splines = this.bifrost_save.splines
         let scene = this.scene
-        if((bifrost !== null) === bool || this.TestValidSplines() === false || this.dotsGroup.children.length <= 2) {
+        
+        if((bifrost_splines !== null) === bool || this.TestValidSplines() === false || this.dotsGroup.children.length <= 2) {
             return
         }
     
@@ -531,7 +613,7 @@ export class SplineGroup {
             this.bifrost_save.splines = null
             return 
         }
-
+        this.is_bifrost_animating = true
         this.bifrost_save.splines = this.splines
         this.bifrost_save.global_tau = this.global_tau
         let last_spline = this.splines[0]
@@ -548,6 +630,7 @@ export class SplineGroup {
         last_spline.curveUpdateDone = () => {
             if(curBifrost === k.length) {
                 last_spline.curveUpdateDone = null
+                this.is_bifrost_animating = false
                 return
             }
 
@@ -563,21 +646,22 @@ export class SplineGroup {
         last_spline.curveUpdateDone()
     }
 
-    image_manager = new ImageManger()
+    //image_manager = new ImageManger()
     set run_img(bool) {
-        this.image_manager.run_image = bool
+        //this.image_manager.run_image = bool
     }
 
     set img_speed(val) {
-        this.image_manager.speed = val
+        //this.image_manager.speed = val
     }
 
     get imgs() {
-        return this.image_manager.GetImages()
+        //return this.image_manager.GetImages()
+        return null
     }
 
     set selectImg(b){
-        this.image_manager.SelectImg(this.scene, b)
+        //this.image_manager.SelectImg(this.scene, b)
     }
 
     set showParam(b) {
@@ -586,7 +670,7 @@ export class SplineGroup {
         }
         
         this.show_param = b
-        if(this.show_param == true) {
+        if(this.show_param === true) {
             for(let s of this.splines) {
                 s.ShowParam(this.param_sampler_name, 0, this.dotsGroup.children.length, this.global_gran)
             }
@@ -612,7 +696,7 @@ export class SplineGroup {
     }
 
     Clear() {
-        this.image_manager.run_image = false
+        //this.image_manager.run_image = false
         this.bifrost_save.splines = null
         for(let s of this.splines) {
             s.Destroy()
@@ -642,11 +726,12 @@ export class SplineGroup {
                 target = this.splines[0].spline.geometry.vertices
             }
             else{
+                // eslint-disable-next-line
                 target = this.splines[0].param_vectors
             }
         }
         
-        this.image_manager.RunImage(this.scene, target, this.global_gran, this.splines[0].curveTau)
+        //this.image_manager.RunImage(this.scene, target, this.global_gran, this.splines[0].curveTau)
     }
 }
 
@@ -670,6 +755,10 @@ export class CanvasManager {
         frame.mouseout = ()=> this.clearPickPosition()
         this.frame = frame
     }
+
+    get glContext () {
+        return this.canvas.getContext('gl')
+    }
     
     set onmousemove(fn) {
         this.frame.onmousemove = fn
@@ -685,6 +774,11 @@ export class CanvasManager {
 
     set onclick(fn) {
         this.frame.onclick = fn
+    }
+
+    onFrameResize() {
+        this.w = this.frame.clientWidth
+        this.h = this.frame.clientHeight
     }
 
     Aspect() {
