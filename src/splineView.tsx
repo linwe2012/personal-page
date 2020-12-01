@@ -17,9 +17,12 @@ const SplineView: React.FC = (props)=>{
     const [imgArr, setImgArr] = React.useState([])
     const [whichImg, setWhichImg] = React.useState(0)
     const [whichSampler, setWhichSampler] = React.useState('linear')
-    const [hint, setHint] = React.useState('Keep Clicking in the Box')
+    const [hint, setHint] = React.useState('Click in the box')
     const [nClicks, setNClicks] = React.useState(0)
-    const [colorText, setColorText] = React.useState({})
+    const [colorText, setColorText] = React.useState<any>({
+        color: '#ffffff90',
+        fontSize: '180%'
+    })
     /*eslint-enable */
    
     const resetDone = () => {
@@ -35,6 +38,28 @@ const SplineView: React.FC = (props)=>{
             if(nClicks <= 4) {
                 setNClicks(nClicks + 1)
             }
+            else {
+                return;
+            }
+            
+
+            if(nClicks === 0) {
+                setHint('Click somewhere else')
+                setColorText({
+                    color: 'white',
+                    fontSize: '120%'
+                })
+            }
+
+            if(nClicks === 1) {
+                setHint('Keep clicking somewhere else')
+                setColorText({
+                    color: 'white',
+                    fontSize: '120%'
+                })
+            }
+
+
             if(nClicks === 3) {
                 setHint('Try Drag the White Dots')
                 setColorText({

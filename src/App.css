@@ -183,6 +183,7 @@ p{
 .project-text {
   color: #ffffffe0;
   font-size: 60%;
+  margin-bottom: 5px;
 }
 
 .project-subtext {
@@ -209,6 +210,10 @@ p{
 
 .project-text-white {
   color: #ffffff;
+}
+
+.project-text-shadow {
+  text-shadow: 0px 0px 5px #000000, 0px 0px 10px #000000;
 }
 
 @media (max-width: 900px) {
@@ -291,7 +296,11 @@ p{
   color:  #ffffff40;
   position: absolute;
   top: 0;
+  transition: color 0.3s;
+  transition: font-size 0.2s;
 }
+
+
 
 
 

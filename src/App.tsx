@@ -263,6 +263,8 @@ function App() {
   useEffect(() => {
     updateSize();
     window.onload = updateSize;
+    document.title = 'Zhaowei Lin'
+
     //updateSize();
     // eslint-disable-next-line
   }, [])
@@ -403,7 +405,7 @@ function App() {
         <h2 className='project-start-title'>Projects</h2>
         <div className='vertical-space-2'></div>
         <div className='project-item' ref={refProjItem(0)}>
-          <img alt='photomonatage' className='project-bg' style={{bottom: 0}} src="static/img/photomontage.png" ref={refProjIm(0)}/>
+          <img alt='photomonatage' className='project-bg' style={{bottom: 0}} src="static/img/photomontage-crunch.png" ref={refProjIm(0)}/>
           <div className='project-content project-cover-dark-gradient-tl' ref={refProjContent(0)}>
           <div ref={refProjContentInner(0)}>
             <div className='project-subtitle'>ZJU | Computational Photography | C++ | OpenCV</div>
@@ -411,7 +413,7 @@ function App() {
             <div className="vertical-space-1"></div>
             <p className="project-text project-lefttext">Users can paint on images to indicate the best part of each image. The algorithm first uses graph-cut to extend user's brushes into regions. Then it uses Gradient Domain Fusion to make it seamless.</p>
             <div className="vertical-space-1"></div>
-            <p className="project-subtext project-lefttext">The background image demonstrates how gradient-domain fusion gradually recover the image from all 0s.</p>
+            <p className="project-subtext project-lefttext">[Background Image] How gradient-domain fusion gradually recover the image from all 0s.</p>
             <a className='project-links' href="https://grail.cs.washington.edu/projects/photomontage/photomontage.pdf"> Paper <br/></a>
             <a className='project-links' href="https://github.com/linwe2012/CourseComputationalPhotography">Github <br/></a>
             <a className='project-links' href="https://github.com/linwe2012/CourseComputationalPhotography">Demo Video <br/></a>
@@ -434,7 +436,7 @@ function App() {
             <p className="project-text project-lefttext">Schrödinger's Equation in Quantum Mechanics can be used to describe superfluids, whose dynamics is similar to that of smoke. The paper leverages Schrödinger's Equation to calculate vortex and generates the velocity field from the wave function.
             </p>
             <div className="vertical-space-1"></div>
-            <p className="project-subtext project-lefttext">The background image demonstrates simulating results with over 100,000,000 particles.</p>
+            <p className="project-subtext project-lefttext">[Background Image] Simulate 256<sup>3</sup> Grids and present results with over 100,000,000 particles.</p>
             <a className='project-links' href="http://page.math.tu-berlin.de/~chern/projects/SchrodingersSmoke/"> Paper <br/></a>
             <a className='project-links' href="https://github.com/linwe2012/ShroedingerSmoke">Github <br/></a>
             <div className="vertical-space-7"></div>
@@ -450,19 +452,19 @@ function App() {
               All three projects are written in typescript and you can play with it online.
             </p>
             <p>
-              <span className="project-text project-text-white"> Spline: </span>
-              <a className='project-links' href="https://github.com/linwe2012/Spline">Github</a> <span>  </span>
-              <a className='project-links' href="https://linwe2012.github.io/Spline/"> Demo </a>
+              <span className="project-text project-text-white"> Spline: </span> <span> &nbsp;</span>
+              <a className='project-links' href="https://github.com/linwe2012/Spline">Github</a> <span> </span>
+              <a className='project-links' href="https://linwe2012.github.io/Spline/"> Play Online Demo </a>
             </p>
             <p>
-              <span className="project-text project-text-white"> Free Form Deformation: </span>
-              <a className='project-links' href="https://github.com/linwe2012/FreeFormDeformation">Github</a> <span>  </span>
-              <a className='project-links' href="https://linwe2012.github.io/FreeFormDeformation/"> Demo </a>
+              <span className="project-text project-text-white"> Free Form Deformation: </span> <span> &nbsp;</span>
+              <a className='project-links' href="https://github.com/linwe2012/FreeFormDeformation">Github</a> <span> </span>
+              <a className='project-links' href="https://linwe2012.github.io/FreeFormDeformation/"> Play Online Demo </a>
             </p>
             <p>
-              <span className="project-text project-text-white"> Fuzzy Warp: </span>
-              <a className='project-links' href="https://github.com/linwe2012/FuzzyWarp">Github</a> <span>  </span>
-              <a className='project-links' href="https://linwe2012.github.io/FuzzyWarp/"> Demo </a>
+              <span className="project-text project-text-white"> Fuzzy Warp: </span> <span> &nbsp;</span>
+              <a className='project-links' href="https://github.com/linwe2012/FuzzyWarp">Github</a> <span> </span>
+              <a className='project-links' href="https://linwe2012.github.io/FuzzyWarp/"> Play Online Demo </a>
             </p>
             <div className="vertical-space-1"></div>
             <SplineView></SplineView>
@@ -472,7 +474,7 @@ function App() {
         </div>
         
         <div className='project-item' style={{backgroundColor: '#88b8ca' }} ref={refProjItem(2)}>
-          <img alt='schroedinger smoke' className='project-bg' style={{bottom: -45}} src="static/img/animal_party.png" ref={refProjIm(2)}/>
+          <img alt='schroedinger smoke' className='project-bg' style={{bottom: -45}} src="static/img/animal_party-crunch.png" ref={refProjIm(2)}/>
           <div className='project-content' ref={refProjContent(2)}>
           <div ref={refProjContentInner(2)}>
             <div className='project-subtitle'>ZJU | Game Design | C# | Joycon</div>
@@ -489,10 +491,38 @@ function App() {
               </p>
 
               <div className="vertical-space-1"></div>
-              <p className="project-subtext">The background image is the intro scene.</p>
+              <p className="project-subtext">[Background Image] The intro scene.</p>
               
               <a className='project-links' href="https://github.com/linwe2012/AnimalParty">Github <br/></a>
               <a className='project-links' href="https://youtu.be/5kacuvv1os8"> Demo Video <br/></a>
+            </div>
+            <div className="vertical-space-5"></div>
+          </div>
+          </div>
+        </div>
+        <div className='project-item' style={{backgroundColor: '#1f282d' }} ref={refProjItem(4)}>
+          <img alt='schroedinger smoke' className='project-bg' style={{bottom: -45}} src="static/img/wordgame-render-2-comp.png" ref={refProjIm(4)}/>
+          <div className='project-content' ref={refProjContent(4)}>
+          <div ref={refProjContentInner(4)}>
+            <div className='project-subtitle'>ZJU | Tech &amp; Innovations | C++ | Sifteo Cubes </div>
+            <h3 style={{color:'white'}}>Fight against Alzheimer's disease with Sifteo Cubes</h3>
+
+            <div className="vertical-space-1"></div>
+            <div className='project-lefttext'>
+              <p className="project-text  project-text-white project-text-shadow">
+              My team surveyed possible ways to fight against Alzheimer's disease (AD). Sound &amp; light stimulations will be helpful according our research.
+              </p>
+              <p className="project-text project-text-white project-text-shadow">
+              We want something like legos but more versatile, and then comes Sifteo Cube. We attached a flashing butt to the cube to enable light simulations.
+              </p>
+              <p className="project-text project-text-white project-text-shadow">
+              I wrote two games, the dyer game where players mix dyers of different colors to obtain designated color, and the word jigsaw puzzle game
+              </p>
+
+              <div className="vertical-space-1"></div>
+              <p className="project-subtext">[Background Image] A rendering of the cubes.</p>
+              
+              <a className='project-links' href="https://github.com/linwe2012/SifteoGames">Github <br/></a>
             </div>
             <div className="vertical-space-5"></div>
           </div>
