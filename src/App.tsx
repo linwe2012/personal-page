@@ -3,172 +3,16 @@ import React, { useEffect, useLayoutEffect } from 'react';
 import './App.css';
 //import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid'
-import Tooltip from '@material-ui/core/Tooltip'
 import { Github } from '@icons-pack/react-simple-icons';
-import { Cplusplus, Javascript, Python, Props as SimpleIconProps, Mathworks, Icon as SimpleIcon, Opengl, Gmail } from '@icons-pack/react-simple-icons';
-import Link from '@material-ui/core/Link';
+import { Cplusplus, Javascript, Python, Props as SimpleIconProps, Mathworks, Opengl, Gmail } from '@icons-pack/react-simple-icons';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SplineView from './splineView'
 
-interface IntroEntryProps {
-  title: string
-  text?: string
-  centerTitle?: boolean
-  
-}
-const IntroEntry : React.FC<IntroEntryProps> = (props) =>{
-  const style : React.CSSProperties = {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyItems: 'center',
-    justifyContent: 'center'
+import PrettyTitle from './bits/pretty_title'
+import PristineLinks from './bits/pristine_links'
+import { IntroEntry, IntroIcon, createConcanicalPolygonPath } from './bits/svg_utils'
 
-  }
-  const titleStyle : React.CSSProperties = {
-    display: 'flex',
-    flexDirection: 'column',
-    color: '#00000044',
-    letterSpacing: '0.2em',
-    textAlign: props.centerTitle ? 'center' : undefined,
-    fontSize: '70%'
-  }
-
-  return (
-      <div style={style}>
-          <p style={titleStyle}>{props.title}</p>
-          <p>{props.text ? props.text : props.children}</p>
-      </div>
-  )
-}
-
-interface IntroIconProps  extends SimpleIconProps {
-  icon: SimpleIcon,
-  tooltip?: string,
-  link?: string,
-  // onClick?: ((event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void)
-}
-class Vector2 {
-  x: number = 0
-  y: number = 0
-
-  constructor(_x:number, _y:number) {
-    this.x = _x;
-    this.y = _y;
-  }
-
-  add(rhs:Vector2) {
-    this.x += rhs.x;
-    this.y += rhs.y;
-    return this;
-  }
-
-  multiplyScalar(rhs:number) {
-    this.x *= rhs;
-    this.y *= rhs;
-    return this;
-  }
-
-  sub(rhs: Vector2) {
-    this.x -= rhs.x;
-    this.y -= rhs.y;
-    return this
-  }
-
-  clone() {
-    return new Vector2(this.x, this.y);
-  }
-
-  svgfmt() {
-    return `${this.x},${this.y}`
-  }
-}
-
-interface ConcanicalPolygonPathParams {
-  startAngle?: number // in degress
-  startX?: number
-  startY?: number
-}
-
-const createConcanicalPolygonPath = (n : number, size : number, radius : number, params?: ConcanicalPolygonPathParams) =>{
-  //n = 4
-  //size = 100
-  //radius = 0
-  const deg2rad = (n:number) =>{
-    return n / 180 * Math.PI
-  }
-  const startAngle = deg2rad( params?.startAngle || 0 )
-  const startX = params?.startX  || 0
-  const startY = params?.startY  || 0
-  const center = new Vector2(size/2 + startX, size/2 + startY)
-  const r = size / 2
-  
-  const halfAngleDeg = 90 - 180 / n;
-  //const arcAngleDeg = 180 - 2 * halfAngleDeg;
-  const halfAngle = deg2rad(halfAngleDeg)
-  //const arcAngle = deg2rad(arcAngleDeg)
-
-  const cut = radius / Math.tan(halfAngle);
-  const len = 2 * r * Math.cos(halfAngle)
-  const cut_percentage = cut / len;
-  //console.log(`cut: ${cut_percentage*100}%`)
-  
-
-  const vertices = new Array<Vector2>()
-  let path = ""
-  for(let i = 0; i < n; ++i) {
-    const angle = startAngle-2 * Math.PI / n  * i
-    const pos = new Vector2(r * Math.cos(angle), r * Math.sin(angle))
-    const vertex = pos.add(center)
-    vertices.push(vertex)
-  }
-
-  //const lastArcStop = null
-  
-  for(let i = 0; i < n; ++i) {
-    const A = vertices[(i + 0) % n]
-    const B = vertices[(i + 1) % n]
-    //const C = vertices[(i + 2) % n]
-
-    const AB = A.clone().add(B.clone().sub(A).multiplyScalar(cut_percentage))
-    const BC = A.clone().add(B.clone().sub(A).multiplyScalar(1-cut_percentage))
-    //const BC = B.clone().add(C.clone().sub(B).multiplyScalar(cut_percentage))
-    if (i === 0) {
-      const Q = vertices[(n-1)];
-      const QA = Q.clone().add(A.clone().sub(Q).multiplyScalar(1-cut_percentage))
-      path += `M ${QA.svgfmt()} `
-    }
-    
-    //path += `L ${B.svgfmt()} `
-    path += `A ${radius} ${radius} 0 0 0 ${AB.x} ${AB.y} `
-    path += `L ${BC.svgfmt()} `
-  }
-  return path
-}
-
-const IntroIcon : React.FC<IntroIconProps> = (props) =>{
-  const propIcon = {
-    ...props,
-    icon: undefined,
-    message: undefined,
-    link: undefined,
-    
-  }
-  let icon = <props.icon {...propIcon} ></props.icon>
-  if(props.link) {
-    icon = (<Link href={props.link}>
-      {icon}
-    </Link>)
-  }
-
-  if(props.tooltip) {
-    icon =  (
-    <Tooltip title={props.tooltip} aria-label={props.tooltip}>
-      {icon}
-    </Tooltip>)
-  }
-  return (icon)
-}
 /*
 interface CardLayoutProps {
     background: JSX.Element
@@ -195,8 +39,6 @@ const CardLayout: React.FC<CardLayoutProps> = (props) => {
   )
 }
 */
-
-
 
 function App() {
 
@@ -264,7 +106,6 @@ function App() {
     updateSize();
     window.onload = updateSize;
     document.title = 'Zhaowei Lin'
-
     //updateSize();
     // eslint-disable-next-line
   }, [])
@@ -318,8 +159,6 @@ function App() {
             <Grid item xs={12}>
               <div className="avatar-center-align">
                 <div className="avatar-circle" style={{position: 'relative'}}>
-                  {/* <div className="avatar-wrapper"> */}
-                  { /* <img alt='leon' className='avatar-img' src='static/img/me.jpg'></img> */ }
                   <svg viewBox='0, 0 240 240' width="240" height="240" style={{position: 'absolute', top: -10, left: -10}}>
                     <path d={createConcanicalPolygonPath(16, 240, 15, { startAngle: 30})} fill="#e5f290da"/>
                   </svg>
@@ -335,7 +174,8 @@ function App() {
                   <svg viewBox='0 0 200 200' width="200" height="200" style={{position: 'relative'}}>
                     <defs>
                       <pattern id="avatar" patternUnits="userSpaceOnUse" width="200" height="200">
-                      <image href='static/img/me.jpg' x="-110" y="-80" width="400" height="400"/>
+                      {/* <image href='static/img/me.jpg' x="-110" y="-80" width="400" height="400"/> */}
+                      <image href='static/img/me-removebg-preview-sqr.svg' width="200" height="200"/>
                       </pattern>
                     </defs>
                     <path d={createConcanicalPolygonPath(6, 200, 15)} fill="url(#avatar)"/>
@@ -404,12 +244,18 @@ function App() {
       <div>
         <h2 className='project-start-title'>Projects</h2>
         <div className='vertical-space-2'></div>
-        <div className='project-item' ref={refProjItem(0)}>
-          <img alt='photomonatage' className='project-bg' style={{bottom: 0}} src="static/img/photomontage-crunch.png" ref={refProjIm(0)}/>
+        <div className='project-item' style={{background: 'black'}} ref={refProjItem(0)}>
+          <img onLoad={updateSize} alt='photomonatage' className='project-bg' style={{bottom: 0}} src="static/img/photomontage-crunch.png" ref={refProjIm(0)}/>
           <div className='project-content project-cover-dark-gradient-tl' ref={refProjContent(0)}>
           <div ref={refProjContentInner(0)}>
-            <div className='project-subtitle'>ZJU | Computational Photography | C++ | OpenCV</div>
-            <h3 style={{color:'white'}}>Interactive Digital Photomontage</h3>
+            
+            <PrettyTitle
+              subtitle = 'ZJU | Computational Photography | C++ | OpenCV'
+              title = 'Interactive Digital Photomontage' titleUnderline
+              themeColor = '#00fddb'
+            ></PrettyTitle>
+            
+            
             <div className="vertical-space-1"></div>
             <p className="project-text project-lefttext">Users can paint on images to indicate the best part of each image. The algorithm first uses graph-cut to extend user's brushes into regions. Then it uses Gradient Domain Fusion to make it seamless.</p>
             <div className="vertical-space-1"></div>
@@ -424,7 +270,7 @@ function App() {
 
         
         <div className='project-item' style={{backgroundColor: '#222020'}} ref={refProjItem(1)}>
-          <img alt='schroedinger smoke' className='project-bg' style={{bottom: 0}} src="static/img/schroedinger_smoke.png" ref={refProjIm(1)}/>
+          <img onLoad={updateSize} alt='schroedinger smoke' className='project-bg' style={{bottom: 0}} src="static/img/schroedinger_smoke.png" ref={refProjIm(1)}/>
           <div className='project-content' ref={refProjContent(1)}>
           <div ref={refProjContentInner(1)}>
             <div className='project-subtitle'>ZJU | Advances in Computer Graphics | C# | Compute Shader</div>
@@ -446,8 +292,12 @@ function App() {
 
         <div className='project-item gradient-spline'>
           <div className='project-content' style={{position: 'relative'}}>
-            <div className='project-subtitle'>ZJU | Computer Animations | Typescript | WebGL</div>
-            <h3 style={{color:'white'}}>Splines, FFD, FuzzyWarp</h3>
+          <PrettyTitle
+              subtitle = 'ZJU | Computer Animations | Typescript | WebGL'
+              title = 'Splines, FFD, FuzzyWarp'
+              themeColor = '#4776f8'
+            ></PrettyTitle>
+            <div className="vertical-space-1"></div>
             <p className="project-text">
               All three projects are written in typescript and you can play with it online.
             </p>
@@ -469,19 +319,20 @@ function App() {
             <div className="vertical-space-1"></div>
             <SplineView></SplineView>
           </div>
-          
-        
         </div>
         
         <div className='project-item' style={{backgroundColor: '#88b8ca' }} ref={refProjItem(2)}>
-          <img alt='schroedinger smoke' className='project-bg' style={{bottom: -45}} src="static/img/animal_party-crunch.png" ref={refProjIm(2)}/>
+          <img onLoad={updateSize} alt='schroedinger smoke' className='project-bg' style={{bottom: -45}} src="static/img/animal_party-crunch.png" ref={refProjIm(2)}/>
           <div className='project-content' ref={refProjContent(2)}>
           <div ref={refProjContentInner(2)}>
             <div className='project-subtitle'>ZJU | Game Design | C# | Joycon</div>
             <h3 style={{color:'white'}}>Animal Party</h3>
 
-            <div className="vertical-space-1"></div>
-            <div className='project-lefttext' style={{backgroundColor: '#00000055', marginLeft: -40, paddingLeft: 40, paddingTop: 20, paddingRight: 20, paddingBottom: 20}}>
+            <div className="vertical-space-3"></div>
+            <div className='project-lefttext' style={{backgroundColor: '#00000085', marginLeft: -40, paddingLeft: 40, paddingTop: 20, paddingRight: 20, paddingBottom: 20}}>
+              <div style={{position:'absolute', right: 0, top: -12, width: '60%', height: 20, background:'#ff3c28', lineHeight:'17px', color:'white'}}><span style={{fontWeight:800, marginLeft: '5px'}}>&ndash;</span></div>
+              <div style={{position:'absolute', left: 0, bottom: -12, width: '60%', height: 20, background:'#0ab9e5', lineHeight:'17px', color:'white', textAlign: 'right'}}><span style={{fontWeight:800, marginRight: '10px'}}>+</span></div>
+              <div className="vertical-space-1"></div>
               <p className="project-text  project-text-white">
               I led my team made this game where Joycon &amp; body movements are used to play. The game is about taking care of animals. You can feed and pet animals in the game.  
 
@@ -495,13 +346,14 @@ function App() {
               
               <a className='project-links' href="https://github.com/linwe2012/AnimalParty">Github <br/></a>
               <a className='project-links' href="https://youtu.be/5kacuvv1os8"> Demo Video <br/></a>
+              <div className="vertical-space-1"></div>
             </div>
             <div className="vertical-space-5"></div>
           </div>
           </div>
         </div>
         <div className='project-item' style={{backgroundColor: '#1f282d' }} ref={refProjItem(4)}>
-          <img alt='schroedinger smoke' className='project-bg' style={{bottom: -45}} src="static/img/wordgame-render-2-comp.png" ref={refProjIm(4)}/>
+          <img onLoad={updateSize} alt='schroedinger smoke' className='project-bg' style={{bottom: -45}} src="static/img/wordgame-render-2-comp.png" ref={refProjIm(4)}/>
           <div className='project-content' ref={refProjContent(4)}>
           <div ref={refProjContentInner(4)}>
             <div className='project-subtitle'>ZJU | Tech &amp; Innovations | C++ | Sifteo Cubes </div>
@@ -529,6 +381,219 @@ function App() {
           </div>
         </div>
 
+        <div className="vertical-space-3"></div>
+        <div className="vertical-space-3"></div>
+        <div className='project-item'>
+          <div className='project-content-text'>
+            <PrettyTitle
+              subtitle = 'ZJU | Computer Graphics | C++ | OpenGL'
+              title = 'Render Engine'
+              themeColor = '#fc5c7d'
+              titleBoxClass = 'project-title-nabla'
+              leftBoxClass = 'project-leftbox-nabla'
+            ></PrettyTitle>
+            <div className="vertical-space-1"></div>
+            <div className='project-lefttext'>
+              <p className="project-text project-text-darktext">
+                It supports Physically Based Rendering, deferred lights. With the help of ImGUI, it allows for editing lights, loading models and modifying textures.
+              </p>
+              <p className="project-text project-text-darktext">
+                It adopts Entity Component System (ECS) architecture. In the engine, an entity if a number used for indexing components.
+              </p>
+              <p className="project-text project-text-darktext">
+                Hashmaps tailored for sparse &amp; dense components are implemented.
+              </p>
+              <PristineLinks 
+                github = "https://github.com/linwe2012/nabla"
+                lightBackground
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className='project-item' style={{marginTop: '45px'}}>
+          <div className='project-content-text'>
+            <PrettyTitle
+              subtitle = 'ZJU | Database | C++'
+              title = 'Mini SQL Engine'
+              themeColor = '#105858'
+              textColor = 'black'
+              titleClass = 'underline--stars'
+              hideLeftRect lightBackground
+            ></PrettyTitle>
+            
+            <div className="vertical-space-1"></div>
+            <div className='project-lefttext'>
+              <p className="project-text project-text-darktext">
+                It supports insert, delete and search. All data are stored in a paged file. 
+              </p>
+
+              <PristineLinks 
+                github = "https://github.com/linwe2012/miniSQL"
+                lightBackground
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="vertical-space-3"></div>
+        <div className='project-item'>
+          <div className='project-content-text'>
+            <PrettyTitle
+              subtitle = 'ZJU | Compilers | C | LLVM'
+              title = 'C Compiler written in C' titleUnderline
+              themeColor = '#991100'
+              textColor = 'black'
+              hideLeftRect lightBackground
+            ></PrettyTitle>
+            <div className="vertical-space-1"></div>
+            <div className='project-lefttext'>
+              <p className="project-text project-text-darktext">
+                Input files are tokenized by Flex, then feed to Yacc for a LALR parsing. During Yacc's parsing, an Abstract Syntax Tree (AST) is generated. 
+                AST is scanned to do type checking and to generate targe code with the help of LLVM.
+              </p>
+              <PristineLinks 
+                github = "https://github.com/linwe2012/compiler"
+                lightBackground
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="vertical-space-3"></div>
+        <div className='project-item'>
+          <div className='project-content-text'>
+            <PrettyTitle
+              subtitle = 'ZJU | Image Processing | C/C++ '
+              title = 'Image Processing Library'
+              themeColor = 'linear-gradient(90deg, rgba(4,248,249,1) 0%, rgba(143,254,102,1) 100%)'
+              textColor = 'black'
+              lightBackground
+            ></PrettyTitle>
+            <div className="vertical-space-1"></div>
+            <div className='project-lefttext'>
+              <p className="project-text project-text-darktext">
+              It allows read/write images. It also supports HDR, histogram equalization, Otsu thresholding, color space transformation, bilateral filter, etc.
+              </p>
+
+              <PristineLinks 
+                github = "https://github.com/linwe2012/ImageConvert"
+                lightBackground
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="vertical-space-3"></div>
+        <div className='project-item'>
+          <div className='project-content-text'>
+            <PrettyTitle
+              subtitle = 'ZJU | Networks | C/C++ '
+              title = 'Simple HTTP Server'
+              themeColor = '#989081'
+              textColor = 'black'
+              hideLeftRect lightBackground
+            ></PrettyTitle>
+            <div className="vertical-space-1"></div>
+            <div className='project-lefttext'>
+              <p className="project-text project-text-darktext">
+                A simple HTTP Server that provides Node.js like APIs.
+              </p>
+
+              <PristineLinks 
+                github = "https://github.com/linwe2012/HTTPServer"
+                lightBackground
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="vertical-space-3"></div>
+        <div className='project-item'>
+          <div className='project-content-text'>
+            <PrettyTitle
+              subtitle = 'NESA Lab | Formal Verification | Tamarin Prover | VS Code '
+              title = 'Tamarin Prover VS Code Language Plugin'
+              themeColor = '#989081'
+              textColor = 'black'
+              hideLeftRect lightBackground
+            ></PrettyTitle>
+            <div className="vertical-space-1"></div>
+            <div className='project-lefttext'>
+              <p className="project-text project-text-darktext">
+                Tamarin prover is a formal verification tool. It only provides syntax highlighting &amp; snippets for vim, sublime. I bring that to VS Code as it is free and more commonly used.
+              </p>
+
+              <PristineLinks 
+                github = "https://github.com/linwe2012/tamarin"
+                lightBackground
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="vertical-space-3"></div>
+        <div className='project-item'>
+          <div className='project-content-text'>
+            <PrettyTitle
+              subtitle = 'ZJU | Object Oriented Programming | C++'
+              title = 'Script Interpreter for Text-base Games'
+              themeColor = '#989081'
+              textColor = 'black'
+              hideLeftRect lightBackground
+            ></PrettyTitle>
+            <div className="vertical-space-1"></div>
+            <div className='project-lefttext'>
+              <p className="project-text project-text-darktext">
+              I made up a scripting language that assimilates Javascript. It is tailored for text-based games. It parses the script and builds an AST. Then it just interpreting the script by walking through AST. It's worth noting that it provides a quite powerful string formatter.
+              </p>
+
+              <p className="project-text project-text-darktext">
+              It is assumed that text-game would have different rooms connected to each other. The author must first sketch the topology of the room in the script. Then the author sets triggers for user input or NPC.
+              </p>
+
+              <PristineLinks 
+                github = "https://github.com/linwe2012/CrappyScriptEngine"
+                lightBackground
+              />
+            </div>
+          </div>
+        </div>
+
+
+        <div className="vertical-space-3"></div>
+        <div className='project-item'>
+          <div className='project-content-text'>
+            <PrettyTitle
+              subtitle = 'ZJU | Assembly | Intel i386 (16bits asm)'
+              title = 'Assembly: Read file, Calculator &amp; Keyboard Reader'
+              themeColor = '#989081'
+              textColor = 'black'
+              hideLeftRect lightBackground
+            ></PrettyTitle>
+            <div className="vertical-space-1"></div>
+            <div className='project-lefttext'>
+              <p className="project-text project-text-darktext">
+                Those are 16bits assembly code.
+              </p>
+              <p className="project-text project-text-darktext">
+              The file reader will open up a file, displaying both raw Hex and ASCII. It supports moving up/down, and page up/down, and jump to beginning or end. Most importantly, it was only 253 lines of assembly code.
+              </p>
+
+              <p className="project-text project-text-darktext">
+                The calcuator does as sound. It only accept a simple expression with one binary operator.
+              </p>
+
+              <PristineLinks 
+                github = "https://github.com/linwe2012/AssemblyLearning"
+                lightBackground
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="vertical-space-3"></div>
+        <a href="https://info.flagcounter.com/a8vl"><img src="https://s01.flagcounter.com/count2/a8vl/bg_FFFFFF/txt_000000/border_CCCCCC/columns_2/maxflags_10/viewers_0/labels_0/pageviews_0/flags_0/percent_0/" alt="Flag Counter" /></a>
       </div>
     </div>
   );

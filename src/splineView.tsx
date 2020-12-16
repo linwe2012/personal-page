@@ -44,7 +44,7 @@ const SplineView: React.FC = (props)=>{
             
 
             if(nClicks === 0) {
-                setHint('Click somewhere else')
+                setHint('Click somewhere else in the Box')
                 setColorText({
                     color: 'white',
                     fontSize: '120%'
@@ -52,7 +52,7 @@ const SplineView: React.FC = (props)=>{
             }
 
             if(nClicks === 1) {
-                setHint('Keep clicking somewhere else')
+                setHint('Keep clicking somewhere else in the Box')
                 setColorText({
                     color: 'white',
                     fontSize: '120%'
