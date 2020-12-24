@@ -3,8 +3,8 @@ import React, { useEffect, useLayoutEffect } from 'react';
 import './App.css';
 //import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid'
-import { Github } from '@icons-pack/react-simple-icons';
-import { Cplusplus, Javascript, Python, Props as SimpleIconProps, Mathworks, Opengl, Gmail } from '@icons-pack/react-simple-icons';
+import { Blogger, Csharp, Github, Typescript } from '@icons-pack/react-simple-icons';
+import { Cplusplus, Python, Props as SimpleIconProps, Mathworks, Opengl, Gmail } from '@icons-pack/react-simple-icons';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SplineView from './splineView'
@@ -12,7 +12,9 @@ import SplineView from './splineView'
 import PrettyTitle from './bits/pretty_title'
 import PristineLinks from './bits/pristine_links'
 import { IntroEntry, IntroIcon, createConcanicalPolygonPath } from './bits/svg_utils'
+import process from "process";
 
+const development: boolean = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 /*
 interface CardLayoutProps {
     background: JSX.Element
@@ -189,7 +191,8 @@ function App() {
               <Grid container>
                 <Grid item xs={12} sm={5} md={12} lg={5}> 
                   <div className="vertical-space-2"></div>
-                  <IntroEntry title='Contacts'>
+                  <IntroEntry title='Infos' bottom>
+                    <IntroIcon icon={Blogger} color="#181717" {...introIconStyle} tooltip="Blog" link="https://leon-can-write.github.io/hexo-blogs/"/>
                     <IntroIcon icon={Github} color="#181717" {...introIconStyle} tooltip="Github" link="https://github.com/linwe2012"/>
                     <IntroIcon  aria-controls="menu-gmail" aria-haspopup="true" icon={Gmail} color="#D14836" onClick={handleGmailClick} {...{...introIconStyle, ...{style:{cursor:'pointer'}}}} tooltip="Gmail"/>
                     <Menu
@@ -203,16 +206,18 @@ function App() {
                       <MenuItem onClick={()=>{handleGmailClose('copy')}}>Copy Address</MenuItem>
                       <MenuItem onClick={()=>{handleGmailClose('mail')}}>Send Mail</MenuItem>
                     </Menu>
+
                   </IntroEntry>
                 </Grid>
                 <Grid item xs={12} sm={7} md={12} lg={7}>
                   <div className="vertical-space-2"></div>
-                  <IntroEntry title='Proficiency'>
+                  <IntroEntry title='Proficiency' bottom>
                     <IntroIcon icon={Cplusplus} color="#00599C" {...introIconStyle} tooltip="C/C++"/>
                     <IntroIcon icon={Python} color="#3776AB" {...introIconStyle} tooltip="Python"/>
-                    <IntroIcon icon={Javascript} color="#F7DF1E" {...introIconStyle} tooltip="Javascript/Typescript"/>
+                    <IntroIcon icon={Typescript} color="#3178C6" {...introIconStyle} tooltip="Javascript/Typescript"/>
                     <IntroIcon icon={Mathworks} color="#0076A8" {...introIconStyle} tooltip="Matlab"/>
-                    <IntroIcon icon={Opengl} color="#5586A48" {...introIconStyle} tooltip="OpenGL"/>
+                    <IntroIcon icon={Csharp} color="#239120" {...introIconStyle} tooltip="C#/Unity"/>
+                    <IntroIcon icon={Opengl} color="#5586A4" {...introIconStyle} tooltip="OpenGL"/>
                   </IntroEntry>
                 </Grid>
               </Grid>
@@ -380,6 +385,34 @@ function App() {
           </div>
           </div>
         </div>
+        <div className='project-item' style={{backgroundColor: '#657387' }} ref={refProjItem(5)}>
+          <img onLoad={updateSize} alt='schroedinger smoke' className='project-bg' style={{bottom: 0}} src="static/img/hdr-sm-optim.png" ref={refProjIm(5)}/>
+          <div className='project-content' ref={refProjContent(5)}>
+          <div ref={refProjContentInner(5)}>
+            <PrettyTitle
+              subtitle = 'ZJU | Digital Sinal Processing | Matlab'
+              title = 'HDR, "JPEG"'
+              themeColor = '#4776f8' hideLeftRect
+            ></PrettyTitle>
+
+            <div className="vertical-space-1"></div>
+            <div className='project-lefttext' style={{backgroundColor: '#904706a5', marginLeft: -40, paddingLeft: 40, paddingTop: 20, paddingRight: 20, paddingBottom: 20}}>
+              <p className="project-text  project-text-white">
+              Best course ever. I learned how FFT, DCT works and I implenent the JPEG compression procedure, creating my own compressor and viewer.
+              </p>
+              <p className="project-text project-text-white">
+              As my final project, I fused several images to make a hdr image. In the backgound, images in the hexagon are over exposed or under exposed. I devised an alorithm that extracts best part in images of different exposure.
+              </p>
+
+              <div className="vertical-space-1"></div>
+              
+              <a className='project-links' href="https://github.com/linwe2012/CourseDigitalSignalProcessing/">Github <br/></a>
+            </div>
+            <div className="vertical-space-5"></div>
+          </div>
+          </div>
+        </div>
+        
 
         <div className="vertical-space-3"></div>
         <div className="vertical-space-3"></div>
@@ -593,7 +626,12 @@ function App() {
         </div>
 
         <div className="vertical-space-3"></div>
-        <a href="https://info.flagcounter.com/a8vl"><img src="https://s01.flagcounter.com/count2/a8vl/bg_FFFFFF/txt_000000/border_CCCCCC/columns_2/maxflags_10/viewers_0/labels_0/pageviews_0/flags_0/percent_0/" alt="Flag Counter" /></a>
+        {
+          development ? 
+            <div> Data collection Disabled </div>
+            : <a href="https://info.flagcounter.com/a8vl"><img src="https://s01.flagcounter.com/count2/a8vl/bg_FFFFFF/txt_000000/border_CCCCCC/columns_2/maxflags_10/viewers_0/labels_0/pageviews_0/flags_0/percent_0/" alt="Flag Counter" /></a>
+        }
+        
       </div>
     </div>
   );

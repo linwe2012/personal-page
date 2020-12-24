@@ -6,7 +6,7 @@ interface IntroEntryProps {
     title: string
     text?: string
     centerTitle?: boolean
-    
+    bottom?: boolean
   }
  export const IntroEntry : React.FC<IntroEntryProps> = (props) =>{
     const style : React.CSSProperties = {
@@ -22,7 +22,8 @@ interface IntroEntryProps {
       color: '#00000044',
       letterSpacing: '0.2em',
       textAlign: props.centerTitle ? 'center' : undefined,
-      fontSize: '70%'
+      fontSize: '70%',
+      marginBottom: props.bottom ? '10px' : undefined,
     }
   
     return (
@@ -132,7 +133,7 @@ interface IntroEntryProps {
   }
 
   interface IntroIconProps  extends SimpleIconProps {
-    icon: SimpleIcon,
+    icon?: SimpleIcon,
     tooltip?: string,
     link?: string,
     // autoSize?: boolean
@@ -146,7 +147,7 @@ interface IntroEntryProps {
       message: undefined,
       link: undefined
     }
-    let icon = <props.icon {...propIcon} ></props.icon>
+    let icon = props.icon ? <props.icon {...propIcon} ></props.icon> : <div> {props.tooltip} </div>
     if(props.link) {
       icon = (<Link href={props.link}>
         {icon}
