@@ -14,7 +14,7 @@ import PristineLinks from './bits/pristine_links'
 import { IntroEntry, IntroIcon, createConcanicalPolygonPath } from './bits/svg_utils'
 import process from "process";
 
-const development: boolean = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
+const development: boolean = (!process.env.NODE_ENV || process.env.NODE_ENV !== 'development');
 /*
 interface CardLayoutProps {
     background: JSX.Element
@@ -231,7 +231,7 @@ function App() {
         <h3 style = {{ marginBottom: 10 }}>Student, Programmer in Hangzhou</h3>
 
         <p>
-          I'm a senior colledge student. I love to create cool stuffs. 
+          I'm a senior college student. I love to create cool stuffs. 
 
           I currently intern at Bytedance, working to improve the sdk that empowers Tiktok, Spicy, Douyin and much more.
         </p>
@@ -283,7 +283,7 @@ function App() {
 
             <div className="vertical-space-1"></div>
             <p className="project-text project-lefttext">
-            I implements the paper in Unity and accelerate it with Computer Shader, which runs faster than original paper. </p>
+            I implement the paper in Unity and accelerate it with Computer Shader, which runs faster than original paper. </p>
             <p className="project-text project-lefttext">Schrödinger's Equation in Quantum Mechanics can be used to describe superfluids, whose dynamics is similar to that of smoke. The paper leverages Schrödinger's Equation to calculate vortex and generates the velocity field from the wave function.
             </p>
             <div className="vertical-space-1"></div>
@@ -339,7 +339,7 @@ function App() {
               <div style={{position:'absolute', left: 0, bottom: -12, width: '60%', height: 20, background:'#0ab9e5', lineHeight:'17px', color:'white', textAlign: 'right'}}><span style={{fontWeight:800, marginRight: '10px'}}>+</span></div>
               <div className="vertical-space-1"></div>
               <p className="project-text  project-text-white">
-              I led my team made this game where Joycon &amp; body movements are used to play. The game is about taking care of animals. You can feed and pet animals in the game.  
+              I led my team made this game where Joycon &amp; body movements were used to play. The game is about taking care of animals. You can feed and pet animals in the game.  
 
               </p>
               <p className="project-text  project-text-white">
