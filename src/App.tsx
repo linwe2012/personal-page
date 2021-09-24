@@ -231,9 +231,13 @@ function App() {
         <h3 style = {{ marginBottom: 10 }}>Student, Programmer in Hangzhou</h3>
 
         <p>
-          I'm a senior college student. I love to create cool stuffs. 
+          I'm currently a MSCS student studying at Yale. I love to create cool stuffs. 
 
-          I currently intern at Bytedance, working to improve the sdk that empowers Tiktok, Spicy, Douyin and much more.
+          I have interned at Bytedance, working to improve the sdk that empowers Tiktok, Spicy, Douyin and much more.
+
+        </p>
+        <p>
+          You can find my <a href="static/files/Zhaowei.Lin.Resume.pdf">resume</a> here.
         </p>
         <div className="vertical-space-3"></div>
         <Grid container justify="center" alignItems="center">
