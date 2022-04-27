@@ -228,10 +228,10 @@ function App() {
       <Grid item xs={12} md={8}>
         <div className="vertical-space-2"></div>
         <h1 style = {{margin: 0}}>Zhaowei Lin</h1>
-        <h3 style = {{ marginBottom: 10 }}>Student, Programmer in Hangzhou</h3>
+        <h3 style = {{ marginBottom: 10 }}>Student, Programmer in New Haven</h3>
 
         <p>
-          I'm currently a MSCS student studying at Yale. I love to create cool stuffs. 
+          I'm currently an MSCS student studying at Yale. I love to create cool stuffs. 
 
           I have interned at Bytedance, working to improve the sdk that empowers Tiktok, Spicy, Douyin and much more.
 
@@ -241,8 +241,19 @@ function App() {
         </p>
         <div className="vertical-space-3"></div>
         <Grid container justify="center" alignItems="center">
-          <Grid item xs={6}> <IntroEntry title='Education' text='Zhejiang Unviersity'></IntroEntry> </Grid>
-          <Grid item xs={6}> <IntroEntry title='Major' text='Digital Media Tech (Dept. of CS)'></IntroEntry> </Grid>
+          <Grid item xs = {12}>
+            <Grid container>
+              <Grid item xs={6}> <IntroEntry title="Master's" text='Yale Unviersity, CT'></IntroEntry> </Grid>
+              <Grid item xs={6}> <IntroEntry title="Master's Degree" text='M.S. in Computer Science'></IntroEntry> </Grid>
+            </Grid>
+            <Grid container>
+              <Grid item xs={6}> <IntroEntry title="Bachelor's" text='Zhejiang Unviersity, China'></IntroEntry> </Grid>
+              <Grid item xs={6}> <IntroEntry title="Bachelor's Degree" text='B.E. in Digital Media Tech'></IntroEntry> </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid container justify="center" alignItems="center">
+          
         </Grid>
       </Grid>
 
